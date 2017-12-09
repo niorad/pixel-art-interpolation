@@ -20,7 +20,7 @@ fun choose(): Boolean {
  * @param colorB
  * @param treshold The maximum difference a channel is allowed to have to still be similar
  */
-fun isColorSimilar(colorA: Int, colorB: Int, treshold: Int = 10) : Boolean {
+fun isColorSimilar(colorA: Int, colorB: Int, treshold: Int = 30) : Boolean {
 
     val a = intToColor(colorA)
     val b = intToColor(colorB)

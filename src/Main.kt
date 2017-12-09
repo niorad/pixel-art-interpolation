@@ -6,10 +6,10 @@ import javax.imageio.ImageIO
 
 fun main(args: Array<String>) {
 
-    val testImage = ImageIO.read(File("images/in/carlow.png"))
+    val testImage = ImageIO.read(File("images/in/hyde.png"))
 
     for (i in 0..10) {
-        val img = interpolate(testImage, 2, true)
+        val img = interpolate(testImage, 4, true)
         val outputFile = File("images/out/testimage_$i.png")
         ImageIO.write(img, "png", outputFile)
         println("Image $i done")
