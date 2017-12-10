@@ -9,9 +9,15 @@ import java.awt.image.BufferedImage
  * @param sourceImage
  * @param iterations How often the method will be applied. Every iteration quadruples the pixels (double width and height)
  * @param randomize Enables skipping of some interpolation-steps, to get more interesting results
+ * @param colorSimilarityTreshold How similar can colors be so they're seen as "same" at interpolation (0-255)
  * @return the final processed image
  */
-fun interpolate(sourceImage: BufferedImage, iterations: Int = 1, randomize: Boolean = false): BufferedImage {
+fun interpolate(
+        sourceImage: BufferedImage,
+        iterations: Int = 1,
+        randomize: Boolean = false,
+        colorSimilarityTreshold: Int = 0
+): BufferedImage {
 
     if (iterations == 0) return sourceImage
 
@@ -40,7 +46,7 @@ fun interpolate(sourceImage: BufferedImage, iterations: Int = 1, randomize: Bool
                 val rightColor = sourceImage.getRGB(j + 1, i)
                 val bottomColor = sourceImage.getRGB(j, i + 1)
                 val bottomRightColor = sourceImage.getRGB(j + 1, i + 1)
-                if (isColorSimilar(rightColor, bottomColor) && isColorSimilar(bottomColor, bottomRightColor)) {
+                if (isColorSimilar(rightColor, bottomColor, colorSimilarityTreshold) && isColorSimilar(bottomColor, bottomRightColor, colorSimilarityTreshold)) {
                     substituteRightBottomColor = rightColor
                 }
             }
@@ -49,7 +55,7 @@ fun interpolate(sourceImage: BufferedImage, iterations: Int = 1, randomize: Bool
                 val leftColor = sourceImage.getRGB(j - 1, i)
                 val bottomColor = sourceImage.getRGB(j, i + 1)
                 val bottomLeftColor = sourceImage.getRGB(j - 1, i + 1)
-                if (isColorSimilar(leftColor, bottomColor) && isColorSimilar(bottomColor, bottomLeftColor)) {
+                if (isColorSimilar(leftColor, bottomColor, colorSimilarityTreshold) && isColorSimilar(bottomColor, bottomLeftColor, colorSimilarityTreshold)) {
                     substituteLeftBottomColor = leftColor
                 }
             }
@@ -58,7 +64,7 @@ fun interpolate(sourceImage: BufferedImage, iterations: Int = 1, randomize: Bool
                 val rightColor = sourceImage.getRGB(j + 1, i)
                 val topColor = sourceImage.getRGB(j, i - 1)
                 val topRightColor = sourceImage.getRGB(j + 1, i - 1)
-                if (isColorSimilar(topColor, rightColor) && isColorSimilar(rightColor, topRightColor)) {
+                if (isColorSimilar(topColor, rightColor, colorSimilarityTreshold) && isColorSimilar(rightColor, topRightColor, colorSimilarityTreshold)) {
                     substituteRightTopColor = rightColor
                 }
             }
@@ -67,7 +73,7 @@ fun interpolate(sourceImage: BufferedImage, iterations: Int = 1, randomize: Bool
                 val leftColor = sourceImage.getRGB(j - 1, i)
                 val topColor = sourceImage.getRGB(j, i - 1)
                 val topLeftColor = sourceImage.getRGB(j - 1, i - 1)
-                if (isColorSimilar(topColor, leftColor) && isColorSimilar(leftColor, topLeftColor)) {
+                if (isColorSimilar(topColor, leftColor, colorSimilarityTreshold) && isColorSimilar(leftColor, topLeftColor, colorSimilarityTreshold)) {
                     substituteLeftTopColor = leftColor
                 }
             }
