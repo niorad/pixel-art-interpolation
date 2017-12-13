@@ -1,20 +1,19 @@
 package com.niorad.nioscale
 
 import com.niorad.processing.interpolate
-import com.sun.org.apache.xpath.internal.operations.Bool
 import kotlinx.coroutines.experimental.*
 import java.awt.image.BufferedImage
 import java.io.File
-import java.util.*
 import javax.imageio.ImageIO
 
 fun main(args: Array<String>) {
 
-    val testImage = ImageIO.read(File("images/in/hyde.png"))
+    val testImage = ImageIO.read(File("images/in/pixularComp.png"))
+    val testMask = ImageIO.read(File("images/in/pixularCompMask.png"))
 
-    val allImages = List(100) { i ->
+    val allImages = List(50) { i ->
         launch(CommonPool) {
-            doAsyncProcessing(i, testImage, 4, true, 30)
+            doAsyncProcessing(i, testImage, testMask, 3, true, i * 5)
         }
     }
 
@@ -28,11 +27,12 @@ fun main(args: Array<String>) {
 suspend fun doAsyncProcessing(
         index: Int,
         testImage: BufferedImage,
+        maskImage: BufferedImage,
         i: Int,
         rand: Boolean,
         sim: Int
 ): Boolean {
-    val img = interpolate(testImage, i, rand, sim)
+    val img = interpolate(testImage, i, rand, sim, maskImage)
     val outputFile = File("images/out/testimage_$index.png")
     ImageIO.write(img, "png", outputFile)
     println("Image $index done")
